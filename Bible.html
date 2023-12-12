@@ -1,21 +1,25 @@
-
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Bible</title>
+    <title>Full Bible with Generative Art</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
         }
+
+        canvas {
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Full Bible</h1>
-    
+
     <label for="bookSelector">Book:</label>
     <select id="bookSelector" onchange="loadChapter()">
         <!-- Populate this dynamically using JavaScript if needed -->
@@ -32,61 +36,40 @@
 
     <div id="bibleText"></div>
 
+    <!-- Add a canvas for generative art -->
+    <canvas id="generativeArt" width="400" height="200"></canvas>
+
     <script>
-        // Replace this function with your own method to fetch Bible text
-        function getBibleText(book, chapter) {
-            // Example: Load Bible text from a local JSON file
-            // Replace this with your own data source (e.g., a database)
-            const bibleData = {
-                "Genesis": {
-                    "1": "In the beginning...",
-                    "2": "Thus the heavens and the earth were finished...",
-                    // Add more chapters as needed
-                },
-                // Add more books as needed
-            };
+        // Your existing script here
 
-            return bibleData[book][chapter];
+        // Add generative art using simple shapes (modify as needed)
+        const canvas = document.getElementById("generativeArt");
+        const context = canvas.getContext("2d");
+
+        function generateArt() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Example: Draw a random rectangle
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const width = Math.random() * 100;
+            const height = Math.random() * 100;
+            
+            context.fillStyle = getRandomColor();
+            context.fillRect(x, y, width, height);
         }
 
-        function loadChapter() {
-            const bookSelector = document.getElementById("bookSelector");
-            const chapterSelector = document.getElementById("chapterSelector");
-            const bibleTextElement = document.getElementById("bibleText");
-
-            const selectedBook = bookSelector.value;
-
-            // Populate chapters dynamically for the selected book
-            const chapters = Object.keys(getBibleText(selectedBook));
-            chapterSelector.innerHTML = "";
-            chapters.forEach(chapter => {
-                const option = document.createElement("option");
-                option.value = chapter;
-                option.text = `Chapter ${chapter}`;
-                chapterSelector.add(option);
-            });
-
-            // Load the verse for the selected chapter
-            loadVerse();
+        function getRandomColor() {
+            const letters = "0123456789ABCDEF";
+            let color = "#";
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
-        function loadVerse() {
-            const bookSelector = document.getElementById("bookSelector");
-            const chapterSelector = document.getElementById("chapterSelector");
-            const bibleTextElement = document.getElementById("bibleText");
-
-            const selectedBook = bookSelector.value;
-            const selectedChapter = chapterSelector.value;
-
-            // Example: Load Bible text from a data source
-            // Replace this with your own method to fetch Bible text
-            const bibleText = getBibleText(selectedBook, selectedChapter);
-
-            bibleTextElement.innerHTML = `<h2>${selectedBook} ${selectedChapter}</h2>${bibleText}`;
-        }
-
-        // Initial load
-        loadChapter();
+        // Call the generative art function on page load
+        window.onload = generateArt;
     </script>
 </body>
 </html>

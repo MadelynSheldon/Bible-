@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,22 +15,62 @@
 </head>
 <body>
     <h1>Full Bible</h1>
+    
+    <label for="bookSelector">Book:</label>
     <select id="bookSelector" onchange="loadChapter()">
         <!-- Populate this dynamically using JavaScript if needed -->
         <option value="Genesis">Genesis</option>
-        <option value="Exodus">Exodus</option>
         <!-- Add all books of the Bible -->
     </select>
-    <select id="chapterSelector" onchange="loadChapter()">
+
+    <label for="chapterSelector">Chapter:</label>
+    <select id="chapterSelector" onchange="loadVerse()">
         <!-- Populate this dynamically using JavaScript if needed -->
         <option value="1">Chapter 1</option>
-        <option value="2">Chapter 2</option>
         <!-- Add all chapters -->
     </select>
+
     <div id="bibleText"></div>
 
     <script>
+        // Replace this function with your own method to fetch Bible text
+        function getBibleText(book, chapter) {
+            // Example: Load Bible text from a local JSON file
+            // Replace this with your own data source (e.g., a database)
+            const bibleData = {
+                "Genesis": {
+                    "1": "In the beginning...",
+                    "2": "Thus the heavens and the earth were finished...",
+                    // Add more chapters as needed
+                },
+                // Add more books as needed
+            };
+
+            return bibleData[book][chapter];
+        }
+
         function loadChapter() {
+            const bookSelector = document.getElementById("bookSelector");
+            const chapterSelector = document.getElementById("chapterSelector");
+            const bibleTextElement = document.getElementById("bibleText");
+
+            const selectedBook = bookSelector.value;
+
+            // Populate chapters dynamically for the selected book
+            const chapters = Object.keys(getBibleText(selectedBook));
+            chapterSelector.innerHTML = "";
+            chapters.forEach(chapter => {
+                const option = document.createElement("option");
+                option.value = chapter;
+                option.text = `Chapter ${chapter}`;
+                chapterSelector.add(option);
+            });
+
+            // Load the verse for the selected chapter
+            loadVerse();
+        }
+
+        function loadVerse() {
             const bookSelector = document.getElementById("bookSelector");
             const chapterSelector = document.getElementById("chapterSelector");
             const bibleTextElement = document.getElementById("bibleText");
@@ -44,14 +85,8 @@
             bibleTextElement.innerHTML = `<h2>${selectedBook} ${selectedChapter}</h2>${bibleText}`;
         }
 
-        // Replace this function with your own method to fetch Bible text
-        function getBibleText(book, chapter) {
-            // Example: Load Bible text from a local JSON file
-            // Replace this with your own data source (e.g., a database)
-            const bibleData = /* Load your Bible data here */;
-
-            return bibleData[book][chapter];
-        }
+        // Initial load
+        loadChapter();
     </script>
 </body>
 </html>
